@@ -80,6 +80,7 @@ Nên hôm nay, {me} lấy hết can đảm để nói…`,
   yesTitle: "Yeahhh! 💞",
   yesMessage: "Cảm ơn {you} đã gật đầu. Từ hôm nay, {me} hứa sẽ thương {you} thật nhiều, kiên nhẫn lắng nghe và cùng {you} đi qua mọi ngày nắng mưa.",
   dateLabel: "Ngày đầu tiên của chúng mình",
+  startDate: "2026-12-12",   // ngày đầu tiên, dạng năm-tháng-ngày. Để trống "" = lấy ngày bấm "Đồng ý"
   replyText: "Nhắn cho {me} ngay 💬",
   replyLink: "https://zalo.me/0339655414",  // link Zalo/Messenger để nhắn lại. Để trống "" sẽ ẩn nút
   replayText: "Xem lại từ đầu",
@@ -750,15 +751,21 @@ Nên hôm nay, {me} lấy hết can đảm để nói…`,
   /* ---------- 5. đồng ý ---------- */
   const pad2 = (n) => String(n).padStart(2, "0");
   function accept() {
-    const key = "love-day:" + C.name;
-    let start = Number(store.get(key));
-    if (!start) { start = Date.now(); store.set(key, String(start)); }
-    const d = new Date(start);
+    const fixed = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(C.startDate || "");
+    let d;
+    if (fixed) {
+      d = new Date(+fixed[1], fixed[2] - 1, +fixed[3]);   // giờ địa phương, không lệch múi giờ
+    } else {
+      const key = "love-day:" + C.name;
+      let start = Number(store.get(key));
+      if (!start) { start = Date.now(); store.set(key, String(start)); }
+      d = new Date(start);
+    }
     $("#dateVal").innerHTML = `${pad2(d.getDate())}<i>·</i>${pad2(d.getMonth() + 1)}<i>·</i>${d.getFullYear()}`;
     const today = new Date(); today.setHours(0, 0, 0, 0);
     const first = new Date(d); first.setHours(0, 0, 0, 0);
     const days = Math.round((today - first) / 86400000);
-    $("#dateDays").textContent = days > 0 ? `Đã bên nhau ${days} ngày 💗` : "";
+    $("#dateDays").textContent = days > 0 ? `Đã bên nhau ${days} ngày 💗` : days === 0 ? "Chính là hôm nay 💗" : "";
     go("s-yes");
     celebrate();
   }

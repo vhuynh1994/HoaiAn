@@ -28,6 +28,7 @@ Toàn bộ chữ trên trang nằm trong khối `CONFIG` ở **đầu file `inde
 | `letter` | Nội dung lá thư (xuống dòng bằng Enter) |
 | `reasons` | Danh sách những điều bạn thích ở người ấy. Để `[]` nếu muốn bỏ qua màn này |
 | `noTexts` | Các câu nút "Không" lần lượt đổi sang mỗi lần chạy trốn |
+| `startDate` | Ngày đầu tiên của hai người, đang để `2026-12-12` (năm-tháng-ngày). Để trống `""` sẽ lấy ngày bấm "Đồng ý" |
 | `replyLink` | Link để người ấy nhắn lại ngay, đang để Zalo `https://zalo.me/0339655414`. Để trống `""` sẽ ẩn nút |
 | `music` | File nhạc nền, đang để `music.mp3`. Để trống `""` sẽ tắt nhạc |
 
@@ -56,7 +57,7 @@ Khi dán link vào Messenger/Zalo sẽ hiện ảnh `preview.png` và tiêu đ�
 
 ## Chi tiết nhỏ
 
-- Ngày bấm **Đồng ý** lần đầu được lưu trong trình duyệt của người ấy. Những lần mở lại sau trên cùng máy, trang sẽ hiện *"Đã bên nhau N ngày 💗"*.
+- Màn cuối luôn ghi ngày đầu tiên là **12 · 12 · 2026**. Đúng hôm đó trang sẽ hiện *"Chính là hôm nay 💗"*, từ hôm sau thì tự đếm *"Đã bên nhau N ngày 💗"*.
 - Ở màn cuối, chạm vào bất kỳ chỗ nào trên màn hình sẽ bắn thêm trái tim.
 - Máy đang bật chế độ *giảm chuyển động* (reduce motion) thì hiệu ứng sẽ được giảm bớt.
 
