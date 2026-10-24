@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gửi Hoài An 💌</title>
+<meta name="description" content="Có một lá thư nhỏ đang chờ Hoài An mở ra 💌">
+<meta name="theme-color" content="#1f0a26">
+<!-- Ảnh & mô tả hiện ra khi gửi link qua Messenger/Zalo (sửa lại nếu đổi tên hoặc dùng tên miền khác) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Gửi Hoài An 💌">
+<meta property="og:description" content="Có một lá thư nhỏ đang chờ được mở…">
+<meta property="og:url" content="https://vhuynh1994.github.io/HoaiAn/">
+<meta property="og:image" content="https://vhuynh1994.github.io/HoaiAn/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💌</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+
+<script>
+/* ==================================================================
+   ✏️  CHỈNH NỘI DUNG Ở ĐÂY
+   Trong các đoạn chữ bên dưới có thể dùng:
+     {name}        → tên người nhận
+     {me} / {you}  → cách xưng hô (vd: tớ / cậu, anh / em)
+     {Me} / {You}  → như trên nhưng viết hoa chữ đầu (dùng ở đầu câu)
+   ================================================================== */
+window.CONFIG = {
+  name: "Hoài An",
+  me: "tớ",            // muốn xưng "anh – em" thì đổi thành "anh"
+  you: "cậu",          // ... và đổi thành "em"
+  signature: "",       // tên người gửi, vd "Minh". Để trống sẽ ký "Người luôn nghĩ về {you}"
+
+  // Màn 1 — phong thư
+  introEyebrow: "Có một lá thư nhỏ",
+  introTitle: "gửi {name}",
+  introHint: "Chạm vào phong thư để mở 💌",
+
+  // Màn 2 — lá thư (xuống dòng bằng Enter, giữ nguyên dấu ` ở hai đầu)
+  letter: `Gửi {name},
+
+{Me} đã viết rồi xoá lá thư này không biết bao nhiêu lần, vì sợ mình nói chưa đủ hay.
+
+Từ ngày quen {you}, mỗi ngày của {me} như sáng thêm một chút. {Me} thích nụ cười của {you}, thích cách {you} say sưa kể chuyện, thích cả những lúc mình chỉ ngồi cạnh nhau chẳng nói gì.
+
+{Me} không giỏi nói lời hoa mỹ. Nhưng có một điều {me} chắc chắn: {me} muốn được ở bên, được chăm sóc và làm {you} cười thật nhiều.
+
+Nên hôm nay, {me} lấy hết can đảm để nói…`,
+
+  // Màn 3 — những lý do (để mảng rỗng [] nếu muốn bỏ qua màn này)
+  reasonsTitle: "Những điều {me} thích ở {you}",
+  reasons: [
+    "Nụ cười của {you} — thứ khiến {me} quên hết mệt mỏi sau một ngày dài.",
+    "{You} tử tế với mọi người, kể cả khi chẳng ai để ý.",
+    "Nói chuyện với {you}, {me} chưa bao giờ thấy chán.",
+    "Ở cạnh {you}, {me} được là chính mình.",
+    "Và đơn giản vì {you} là {name}."
+  ],
+
+  // Màn 4 — câu hỏi
+  askName: "{name} ơi,",
+  askQuestion: "làm người yêu {me} nhé?",
+  yesText: "Đồng ý 💖",
+  noTexts: [             // nút "Không" sẽ chạy trốn và đổi chữ lần lượt
+    "Không",
+    "Chắc chưa? 🤨",
+    "Nghĩ lại đi mà 🥺",
+    "Thật sự không à?",
+    "{Me} buồn đó nha…",
+    "Bấm nhầm rồi phải không?",
+    "Cho {me} một cơ hội nha",
+    "Không bấm được đâu 😝"
+  ],
+  surrenderText: "Thôi được, đồng ý 💖",
+
+  // Màn 5 — khi đồng ý
+  yesTitle: "Yeahhh! 💞",
+  yesMessage: "Cảm ơn {you} đã gật đầu. Từ hôm nay, {me} hứa sẽ thương {you} thật nhiều, kiên nhẫn lắng nghe và cùng {you} đi qua mọi ngày nắng mưa.",
+  dateLabel: "Ngày đầu tiên của chúng mình",
+  replyText: "Nhắn cho {me} ngay 💬",
+  replyLink: "",       // vd "https://m.me/ten-facebook" hoặc "https://zalo.me/0912345678". Để trống sẽ ẩn nút
+  replayText: "Xem lại từ đầu",
+
+  // Nhạc nền: bỏ file mp3 vào thư mục này rồi ghi tên file, vd "music.mp3". Để trống = không có nhạc
+  music: ""
+};
+</script>
+
+<style>
+  :root {
+    --night: #13061b;
+    --plum: #2a0c2f;
+    --wine: #5a1846;
+    --rose: #ff5c8a;
+    --rose-deep: #e23d6d;
+    --rose-soft: #ffb3c7;
+    --blush: #ffe3ea;
+    --cream: #fff8f1;
+    --ink: #4b2436;
+    --ink-soft: #8a5a6d;
+    --gold: #f6c77a;
+    --white: #fff7fa;
+    --glass: rgba(255, 255, 255, 0.1);
+    --glass-line: rgba(255, 255, 255, 0.22);
+    --font-ui: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-hand: "Dancing Script", "Segoe Script", cursive;
+    --ease-out: cubic-bezier(.2, .8, .2, 1);
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--night);
+    color: var(--white);
+    font-family: var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  /* ---------- nền ---------- */
+  .backdrop {
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(90% 55% at 50% 108%, rgba(255, 111, 145, .85) 0%, rgba(226, 61, 109, .55) 28%, transparent 62%),
+      radial-gradient(70% 40% at 85% 0%, rgba(124, 58, 160, .35), transparent 70%),
+      linear-gradient(180deg, var(--night) 0%, var(--plum) 45%, var(--wine) 100%);
+  }
+  canvas { position: fixed; inset: 0; pointer-events: none; }
+  #sky { z-index: 1; }
+  #confetti { z-index: 30; }
+
+  /* ---------- màn hình ---------- */
+  .screen {
+    position: fixed; inset: 0; z-index: 10;
+    display: flex; flex-direction: column;
+    padding: max(24px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom));
+    overflow-y: auto; overflow-x: hidden;
+    opacity: 0; visibility: hidden; transform: translateY(18px) scale(.985);
+    transition: opacity .7s ease, transform .8s var(--ease-out), visibility 0s linear .8s;
+  }
+  .screen.is-active {
+    opacity: 1; visibility: visible; transform: none;
+    transition: opacity .8s ease .15s, transform .9s var(--ease-out) .15s, visibility 0s;
+  }
+  .inner { margin: auto; width: 100%; max-width: 480px; }
+  .center { text-align: center; }
+
+  .eyebrow {
+    margin: 0; font-size: 13px; font-weight: 500; letter-spacing: .28em; text-transform: uppercase;
+    color: var(--rose-soft); opacity: .9;
+  }
+  .title {
+    margin: 6px 0 0; font-family: var(--font-hand); font-weight: 700; line-height: 1.1;
+    font-size: clamp(46px, 13vw, 76px);
+    background: linear-gradient(180deg, #fff 10%, var(--blush) 45%, var(--rose-soft) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 6px 24px rgba(255, 92, 138, .45));
+  }
+  .title.sm { font-size: clamp(34px, 9vw, 46px); }
+  .hint { margin: 0; font-size: 14px; color: rgba(255, 240, 245, .75); }
+  .hint.pulse { animation: pulse 2.4s ease-in-out infinite; }
+
+  /* ---------- nút ---------- */
+  .actions { display: flex; justify-content: center; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+  .actions.col { flex-direction: column; align-items: center; }
+  .btn {
+    font: 600 16px/1 var(--font-ui); letter-spacing: .01em;
+    padding: 15px 28px; border-radius: 999px; border: 0; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+    transition: transform .3s var(--ease-out), box-shadow .3s ease, opacity .4s ease, background .3s ease;
+  }
+  .btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .btn-primary, .btn-yes {
+    color: #fff;
+    background: linear-gradient(135deg, #ff7a9c 0%, var(--rose) 45%, var(--rose-deep) 100%);
+    box-shadow: 0 12px 30px -10px rgba(255, 61, 119, .8), inset 0 1px 0 rgba(255, 255, 255, .35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-ghost {
+    color: var(--white); background: var(--glass);
+    box-shadow: inset 0 0 0 1px var(--glass-line);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .btn-ghost:hover { background: rgba(255, 255, 255, .16); }
+  .btn[disabled] { opacity: 0; pointer-events: none; transform: translateY(8px); }
+
+  /* ---------- màn 1: phong thư ---------- */
+  .envelope-wrap { width: min(300px, 78vw); margin: 40px auto 34px; }
+  .envelope {
+    position: relative; display: block; width: 100%; aspect-ratio: 3 / 2;
+    padding: 0; border: 0; background: none; cursor: pointer;
+    perspective: 900px; -webkit-tap-highlight-color: transparent;
+    animation: float 3.8s ease-in-out infinite;
+  }
+  .envelope:focus-visible { outline: 2px dashed var(--rose-soft); outline-offset: 14px; border-radius: 14px; }
+  .envelope > span { position: absolute; display: block; }
+  .env-back {
+    inset: 0; border-radius: 12px; background: #a92a55;
+    box-shadow: 0 34px 60px -22px rgba(0, 0, 0, .7);
+  }
+  .env-paper {
+    left: 7%; right: 7%; top: 6%; bottom: 8%; z-index: 2;
+    border-radius: 8px; background: var(--cream);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, .12);
+    transition: transform 1s var(--ease-out) .45s;
+  }
+  .env-paper::before {
+    content: "♥"; position: absolute; left: 0; right: 0; top: 14%;
+    text-align: center; color: var(--rose); font-size: 22px;
+  }
+  .env-paper::after {
+    content: ""; position: absolute; left: 18%; right: 18%; top: 38%; height: 36%;
+    background: repeating-linear-gradient(180deg, rgba(226, 61, 109, .22) 0 2px, transparent 2px 12px);
+  }
+  .env-front { inset: 0; z-index: 3; border-radius: 12px; overflow: hidden; pointer-events: none; }
+  .env-front::before, .env-front::after { content: ""; position: absolute; inset: 0; }
+  .env-front::before {
+    background: linear-gradient(160deg, #f06b91, #d6446f);
+    clip-path: polygon(0 0, 50% 56%, 100% 0, 100% 100%, 0 100%);
+  }
+  .env-front::after {
+    background: linear-gradient(0deg, #ff8aa9, #f4769a);
+    clip-path: polygon(0 100%, 50% 47%, 100% 100%);
+  }
+  .env-flap {
+    left: 0; right: 0; top: 0; height: 60%; z-index: 4;
+    transform-origin: 50% 0;
+    transition: transform .7s var(--ease-out), z-index 0s linear .32s;
+  }
+  .env-flap::before {
+    content: ""; position: absolute; inset: 0; border-radius: 12px 12px 0 0;
+    background: linear-gradient(180deg, #c93463, #ea5b84);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    filter: drop-shadow(0 3px 3px rgba(0, 0, 0, .25));
+  }
+  .env-seal {
+    left: 50%; top: 60%; z-index: 5; width: 48px; height: 48px; border-radius: 50%;
+    transform: translate(-50%, -50%);
+    display: grid !important; place-items: center;
+    font-size: 20px; color: #ffd9e3;
+    background: radial-gradient(circle at 35% 30%, #ff8d8d, #c81d4e 58%, #870c33);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, .35), inset 0 -3px 6px rgba(0, 0, 0, .25), inset 0 2px 3px rgba(255, 255, 255, .25);
+    transition: transform .4s var(--ease-out), opacity .3s ease;
+  }
+  .envelope.open { animation: none; }
+  .envelope.open .env-flap { transform: rotateX(180deg); z-index: 1; }
+  .envelope.open .env-seal { opacity: 0; transform: translate(-50%, -50%) scale(.3) rotate(-30deg); }
+  .envelope.open .env-paper { transform: translateY(-64%); }
+
+  /* ---------- màn 2: lá thư ---------- */
+  .paper {
+    position: relative; margin: 18px auto 0;
+    padding: 34px 26px 30px; border-radius: 6px 6px 14px 14px;
+    color: var(--ink); background-color: var(--cream);
+    background-image:
+      radial-gradient(120% 80% at 0% 0%, rgba(255, 214, 165, .25), transparent 60%),
+      linear-gradient(transparent calc(1.5em - 1px), rgba(226, 61, 109, .13) 1px);
+    background-size: 100% 100%, 100% 1.5em;
+    background-position: 0 0, 0 34px;
+    font-family: var(--font-hand); font-weight: 500;
+    font-size: clamp(19px, 5vw, 23px); line-height: 1.5em;
+    box-shadow: 0 30px 70px -30px rgba(0, 0, 0, .8), 0 2px 0 rgba(255, 255, 255, .6) inset;
+    transform: rotate(-.6deg);
+    cursor: pointer;
+  }
+  .paper::before {
+    content: ""; position: absolute; top: -12px; left: 50%; width: 110px; height: 26px;
+    transform: translateX(-50%) rotate(-3deg);
+    background: rgba(255, 143, 171, .72);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+    clip-path: polygon(3% 0, 97% 4%, 100% 50%, 96% 100%, 2% 96%, 0 50%);
+  }
+  .letter-body { display: grid; }
+  .letter-body > div { grid-area: 1 / 1; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .letter-ghost { visibility: hidden; }
+  .caret {
+    display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -.12em;
+    background: var(--rose-deep); animation: blink 1s steps(1) infinite;
+  }
+  .typing-done .caret { display: none; }
+  .sign {
+    margin: 18px 0 0; text-align: right; font-weight: 700; color: var(--rose-deep);
+    opacity: 0; transform: translateY(6px); transition: opacity .8s ease, transform .8s var(--ease-out);
+  }
+  .typing-done .sign { opacity: 1; transform: none; }
+  #skipHint { text-align: center; margin-top: 16px; transition: opacity .4s ease; }
+  .typing-done ~ #skipHint { opacity: 0; }
+
+  /* ---------- màn 3: lý do ---------- */
+  .reason-card {
+    position: relative; margin: 28px auto 0; padding: 34px 26px 28px; min-height: 230px;
+    border-radius: 24px; text-align: center;
+    background: linear-gradient(160deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .05));
+    box-shadow: inset 0 0 0 1px var(--glass-line), 0 30px 60px -30px rgba(0, 0, 0, .7);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  }
+  .reason-num {
+    font-family: var(--font-hand); font-weight: 700; font-size: 58px; line-height: 1;
+    color: var(--rose-soft); text-shadow: 0 4px 20px rgba(255, 92, 138, .55);
+  }
+  .reason-text { margin: 0; font-size: clamp(18px, 4.8vw, 21px); line-height: 1.55; font-weight: 500; text-wrap: balance; }
+  .dots { display: flex; gap: 8px; margin-top: 6px; }
+  .dots span { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, .25); transition: background .3s, transform .3s; }
+  .dots span.on { background: var(--rose-soft); transform: scale(1.25); }
+
+  /* ---------- màn 4: câu hỏi ---------- */
+  .heart-wrap { width: 128px; height: 128px; margin: 0 auto 10px; position: relative; }
+  .heart-wrap::after {
+    content: ""; position: absolute; inset: 18%; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 92, 138, .7), transparent 70%);
+    filter: blur(18px); z-index: -1;
+  }
+  .heart-wrap svg { width: 100%; height: 100%; animation: beat 1.3s ease-in-out infinite; overflow: visible; }
+  .ask-name { margin: 0; font-family: var(--font-hand); font-size: clamp(30px, 8vw, 40px); font-weight: 700; color: var(--rose-soft); }
+  .ask-q {
+    margin: 2px 0 0; font-family: var(--font-hand); font-weight: 700; line-height: 1.15;
+    font-size: clamp(40px, 11vw, 62px); color: #fff; text-wrap: balance;
+    text-shadow: 0 6px 30px rgba(255, 92, 138, .55);
+  }
+  #s-ask .inner { max-width: 640px; }
+  .choices { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 16px; margin-top: 36px; min-height: 110px; }
+  .btn-yes {
+    --grow: 1; position: relative; z-index: 2;
+    font-size: calc(16px * var(--grow)); padding: .95em 1.75em;
+    transition: font-size .35s var(--ease-out), box-shadow .3s ease;
+  }
+  .btn-yes:hover { box-shadow: 0 16px 40px -10px rgba(255, 61, 119, .95), inset 0 1px 0 rgba(255, 255, 255, .35); }
+  .btn-no {
+    color: #7a2a4a; background: rgba(255, 247, 250, .94); position: relative; z-index: 3;
+    box-shadow: 0 10px 24px -12px rgba(0, 0, 0, .6);
+    transition: transform .45s var(--ease-out), background .3s ease, color .3s ease;
+    white-space: nowrap;
+  }
+  .btn-no.fleeing {
+    position: fixed; margin: 0;
+    transition: left .45s var(--ease-out), top .45s var(--ease-out), transform .45s var(--ease-out);
+  }
+  .btn-no.surrender { color: #fff; background: linear-gradient(135deg, #ff7a9c, var(--rose-deep)); }
+
+  /* ---------- màn 5: đồng ý ---------- */
+  .yes-msg { margin: 14px auto 0; max-width: 400px; font-size: 17px; line-height: 1.7; color: rgba(255, 244, 247, .92); text-wrap: pretty; }
+  .date-card {
+    margin: 26px auto 0; padding: 18px 22px; max-width: 320px; border-radius: 20px;
+    background: var(--glass); box-shadow: inset 0 0 0 1px var(--glass-line);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .date-label { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--rose-soft); }
+  .date-val { font-family: var(--font-hand); font-weight: 700; font-size: 38px; line-height: 1.1; color: #fff; }
+  .date-val i { font: 400 .7em/1 var(--font-ui); margin: 0 .3em; vertical-align: .12em; color: var(--rose-soft); }
+  .date-days { font-size: 14px; color: rgba(255, 240, 245, .75); }
+  .date-days:empty { display: none; }
+  .yes-sign { margin: 22px 0 0; font-family: var(--font-hand); font-size: 26px; font-weight: 700; color: var(--rose-soft); }
+  #s-yes .heart-wrap { width: 150px; height: 150px; }
+  #s-yes .heart-wrap svg { animation-duration: .9s; }
+
+  /* ---------- nút nhạc ---------- */
+  .music {
+    position: fixed; z-index: 40; right: 16px; bottom: max(16px, env(safe-area-inset-bottom));
+    width: 46px; height: 46px; border-radius: 50%; border: 0; cursor: pointer;
+    color: #fff; font-size: 20px; background: var(--glass);
+    box-shadow: inset 0 0 0 1px var(--glass-line);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .music.playing { animation: spin 6s linear infinite; }
+  .music:not(.playing) { opacity: .65; }
+  .music[hidden] { display: none; }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  @keyframes float { 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-10px) rotate(1.5deg); } }
+  @keyframes pulse { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+  @keyframes blink { 50% { opacity: 0; } }
+  @keyframes beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.12); } 30% { transform: scale(1); } 45% { transform: scale(1.08); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .envelope, .heart-wrap svg, .hint.pulse, .music.playing { animation: none; }
+    .screen, .screen.is-active { transition-duration: .3s; transition-delay: 0s; transform: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+  <canvas id="sky" aria-hidden="true"></canvas>
+
+  <main>
+    <!-- 1. Phong thư -->
+    <section class="screen is-active" id="s-intro" aria-labelledby="introTitle">
+      <div class="inner center">
+        <p class="eyebrow" data-t="introEyebrow"></p>
+        <h1 class="title" id="introTitle" data-t="introTitle"></h1>
+        <div class="envelope-wrap">
+          <button class="envelope" id="envelope" type="button" aria-label="Mở lá thư">
+            <span class="env-back"></span>
+            <span class="env-paper"></span>
+            <span class="env-front"></span>
+            <span class="env-flap"></span>
+            <span class="env-seal" aria-hidden="true">♥</span>
+          </button>
+        </div>
+        <p class="hint pulse" data-t="introHint"></p>
+      </div>
+    </section>
+
+    <!-- 2. Lá thư -->
+    <section class="screen" id="s-letter" aria-label="Lá thư">
+      <div class="inner">
+        <article class="paper" id="paper">
+          <p class="sr-only" id="letterSr"></p>
+          <div class="letter-body" aria-hidden="true">
+            <div class="letter-ghost" id="letterGhost"></div>
+            <div class="letter-typed"><span id="letterTyped"></span><span class="caret"></span></div>
+          </div>
+          <p class="sign" id="letterSign"></p>
+        </article>
+        <p class="hint" id="skipHint">Chạm vào lá thư để đọc nhanh</p>
+        <div class="actions">
+          <button class="btn btn-primary" id="toNext" type="button" disabled>Tiếp tục →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Những lý do -->
+    <section class="screen" id="s-reasons" aria-labelledby="reasonsTitle">
+      <div class="inner center">
+        <h2 class="title sm" id="reasonsTitle" data-t="reasonsTitle"></h2>
+        <div class="reason-card" id="reasonCard" aria-live="polite">
+          <span class="reason-num" id="reasonNum"></span>
+          <p class="reason-text" id="reasonText"></p>
+          <div class="dots" id="reasonDots" aria-hidden="true"></div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" id="nextReason" type="button">Tiếp nữa nè →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Câu hỏi -->
+    <section class="screen" id="s-ask" aria-labelledby="askQ">
+      <div class="inner center">
+        <div class="heart-wrap" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><use href="#heart-shape"/></svg>
+        </div>
+        <p class="ask-name" data-t="askName"></p>
+        <h2 class="ask-q" id="askQ" data-t="askQuestion"></h2>
+        <div class="choices">
+          <button class="btn btn-yes" id="yesBtn" type="button" data-t="yesText"></button>
+          <button class="btn btn-no" id="noBtn" type="button"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Đồng ý -->
+    <section class="screen" id="s-yes" aria-labelledby="yesTitle">
+      <div class="inner center">
+        <div class="heart-wrap" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><use href="#heart-shape"/></svg>
+        </div>
+        <h2 class="title" id="yesTitle" data-t="yesTitle"></h2>
+        <p class="yes-msg" data-t="yesMessage"></p>
+        <div class="date-card">
+          <span class="date-label" data-t="dateLabel"></span>
+          <span class="date-val" id="dateVal"></span>
+          <span class="date-days" id="dateDays"></span>
+        </div>
+        <p class="yes-sign" id="yesSign"></p>
+        <div class="actions col">
+          <a class="btn btn-primary" id="replyBtn" target="_blank" rel="noopener" hidden data-t="replyText"></a>
+          <button class="btn btn-ghost" id="replayBtn" type="button" data-t="replayText"></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <button class="music" id="musicBtn" type="button" hidden aria-label="Bật/tắt nhạc" aria-pressed="false">♪</button>
+  <audio id="bgm" loop preload="none"></audio>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="heart-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ffa3bb"/>
+        <stop offset=".5" stop-color="#ff5c8a"/>
+        <stop offset="1" stop-color="#d42a5c"/>
+      </linearGradient>
+      <g id="heart-shape">
+        <path fill="url(#heart-grad)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        <path fill="#fff" opacity=".45" d="M6.2 6.4c-1.3.5-2 1.8-1.9 3.1.05.5.7.6.9.1.3-.9.9-1.6 1.7-2 .5-.2.4-1-.1-1.1-.2-.1-.4-.1-.6-.1z"/>
+      </g>
+    </defs>
+  </svg>
+
+<script>
+(() => {
+  const C = window.CONFIG;
+  const $ = (s) => document.querySelector(s);
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+  const t = (str) => String(str).replace(/\{(name|me|you|Me|You)\}/g, (_, k) =>
+    ({ name: C.name, me: C.me, you: C.you, Me: cap(C.me), You: cap(C.you) })[k]);
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} }
+  };
+
+  /* ---------- đổ nội dung từ CONFIG ---------- */
+  document.title = t("Gửi {name} 💌");
+  document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = t(C[el.dataset.t]); });
+  const signature = t(C.signature ? "— " + C.signature : "— Người luôn nghĩ về {you}");
+  $("#letterSign").textContent = signature;
+  $("#yesSign").textContent = signature.replace(/^— /, "");
+  if (C.replyLink) { $("#replyBtn").href = C.replyLink; $("#replyBtn").hidden = false; }
+
+  /* ---------- chuyển màn ---------- */
+  const onEnter = {};
+  function go(id) {
+    const cur = document.querySelector(".screen.is-active");
+    if (cur) cur.classList.remove("is-active");
+    const next = $("#" + id);
+    next.classList.add("is-active");
+    next.scrollTop = 0;
+    onEnter[id] && onEnter[id]();
+  }
+
+  /* ---------- nhạc ---------- */
+  const bgm = $("#bgm"), musicBtn = $("#musicBtn");
+  if (C.music) {
+    bgm.src = C.music;
+    musicBtn.hidden = false;
+    bgm.addEventListener("error", () => { musicBtn.hidden = true; });
+    bgm.addEventListener("play", () => { musicBtn.classList.add("playing"); musicBtn.setAttribute("aria-pressed", "true"); });
+    bgm.addEventListener("pause", () => { musicBtn.classList.remove("playing"); musicBtn.setAttribute("aria-pressed", "false"); });
+    musicBtn.addEventListener("click", () => { bgm.paused ? bgm.play().catch(() => {}) : bgm.pause(); });
+  }
+  const startMusic = () => { if (C.music && bgm.paused) bgm.play().catch(() => {}); };
+
+  /* ---------- 1. phong thư ---------- */
+  const envelope = $("#envelope");
+  let opened = false;
+  envelope.addEventListener("click", () => {
+    if (opened) return;
+    opened = true;
+    envelope.classList.add("open");
+    startMusic();
+    setTimeout(() => go("s-letter"), reduced ? 600 : 1750);
+  });
+
+  /* ---------- 2. lá thư (gõ chữ) ---------- */
+  const paper = $("#paper"), typedEl = $("#letterTyped"), toNext = $("#toNext");
+  const letter = t(C.letter).normalize("NFC");
+  $("#letterGhost").textContent = letter;
+  $("#letterSr").textContent = letter;
+  let typeTimer = null, typingDone = false;
+
+  function finishTyping() {
+    clearTimeout(typeTimer);
+    typedEl.textContent = letter;
+    typingDone = true;
+    paper.classList.add("typing-done");
+    toNext.disabled = false;
+    // màn hình nhỏ: cuộn xuống cho thấy chữ ký và nút "Tiếp tục"
+    setTimeout(() => toNext.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "nearest" }), 450);
+  }
+  function startTyping() {
+    typedEl.textContent = "";
+    typingDone = false;
+    paper.classList.remove("typing-done");
+    toNext.disabled = true;
+    if (reduced) return finishTyping();
+    const chars = Array.from(letter);
+    const node = document.createTextNode("");
+    typedEl.appendChild(node);
+    let i = 0;
+    (function step() {
+      if (i >= chars.length) return finishTyping();
+      const ch = chars[i++];
+      node.appendData(ch);
+      const delay = ch === "\n" ? 220 : /[.…!?]/.test(ch) ? 260 : ch === "," ? 140 : 34;
+      typeTimer = setTimeout(step, delay);
+    })();
+  }
+  onEnter["s-letter"] = () => { typeTimer = setTimeout(startTyping, 700); };
+  paper.addEventListener("click", () => { if (!typingDone) finishTyping(); });
+  toNext.addEventListener("click", () => go(C.reasons && C.reasons.length ? "s-reasons" : "s-ask"));
+
+  /* ---------- 3. những lý do ---------- */
+  const reasons = (C.reasons || []).map(t);
+  const card = $("#reasonCard"), nextReason = $("#nextReason"), dots = $("#reasonDots");
+  let ri = 0, swapping = false;
+  dots.innerHTML = reasons.map(() => "<span></span>").join("");
+  function renderReason() {
+    $("#reasonNum").textContent = String(ri + 1).padStart(2, "0");
+    $("#reasonText").textContent = reasons[ri];
+    [...dots.children].forEach((d, i) => d.classList.toggle("on", i === ri));
+    nextReason.textContent = ri === reasons.length - 1 ? "Còn một điều nữa…" : "Tiếp nữa nè →";
+  }
+  onEnter["s-reasons"] = () => { ri = 0; renderReason(); };
+  nextReason.addEventListener("click", async () => {
+    if (swapping) return;
+    if (ri >= reasons.length - 1) return go("s-ask");
+    swapping = true;
+    if (!reduced) {
+      await card.animate(
+        [{ opacity: 1, transform: "none" }, { opacity: 0, transform: "translateX(-36px) rotate(-4deg)" }],
+        { duration: 220, easing: "ease-in", fill: "forwards" }).finished;
+    }
+    ri++;
+    renderReason();
+    if (!reduced) {
+      card.animate(
+        [{ opacity: 0, transform: "translateX(36px) rotate(4deg)" }, { opacity: 1, transform: "none" }],
+        { duration: 420, easing: "cubic-bezier(.2,.8,.2,1)", fill: "forwards" });
+    }
+    swapping = false;
+  });
+
+  /* ---------- 4. câu hỏi: nút "Không" chạy trốn ---------- */
+  const yesBtn = $("#yesBtn"), noBtn = $("#noBtn");
+  const noTexts = C.noTexts.map(t);
+  const choices = $("#s-ask .choices");
+  let attempts = 0, surrendered = false, lastFlee = 0;
+
+  // FLIP: nút trượt mượt tới chỗ mới thay vì nhảy cóc
+  function flip(els, mutate) {
+    const before = els.map((el) => el.getBoundingClientRect());
+    mutate();
+    if (reduced) return;
+    els.forEach((el, i) => {
+      const a = before[i], b = el.getBoundingClientRect();
+      const dx = a.left + a.width / 2 - (b.left + b.width / 2);
+      const dy = a.top + a.height / 2 - (b.top + b.height / 2);
+      if (Math.abs(dx) + Math.abs(dy) > 1) {
+        el.animate([{ translate: `${dx}px ${dy}px` }, { translate: "0 0" }],
+          { duration: 450, easing: "cubic-bezier(.2,.8,.2,1)" });
+      }
+    });
+  }
+
+  function resetAsk() {
+    attempts = 0; surrendered = false;
+    noBtn.textContent = noTexts[0];
+    noBtn.classList.remove("surrender", "fleeing");
+    noBtn.style.left = noBtn.style.top = noBtn.style.transform = "";
+    yesBtn.style.setProperty("--grow", 1);
+  }
+  onEnter["s-ask"] = resetAsk;
+
+  function flee(e) {
+    if (surrendered) return;
+    if (e && e.cancelable) e.preventDefault();
+    const now = performance.now();
+    if (now - lastFlee < 150) return;
+    lastFlee = now;
+    attempts++;
+
+    // hết câu để nói thì "Không" cũng thành "Đồng ý"
+    if (attempts >= noTexts.length) {
+      surrendered = true;
+      flip([yesBtn, noBtn], () => {
+        noBtn.classList.remove("fleeing");
+        noBtn.classList.add("surrender");
+        noBtn.style.left = noBtn.style.top = noBtn.style.transform = "";
+        noBtn.textContent = t(C.surrenderText);
+      });
+      return;
+    }
+
+    // lần đầu: nút rời khỏi hàng, "Đồng ý" trượt vào giữa
+    if (!noBtn.classList.contains("fleeing")) {
+      const r = noBtn.getBoundingClientRect();
+      flip([yesBtn], () => {
+        noBtn.classList.add("fleeing");
+        noBtn.style.left = r.left + "px";
+        noBtn.style.top = r.top + "px";
+      });
+      void noBtn.offsetWidth; // chốt vị trí hiện tại để hiệu ứng chạy từ đây
+    }
+    noBtn.textContent = noTexts[attempts];
+
+    // "Đồng ý" to dần nhưng không bao giờ tràn khỏi màn hình
+    const scale = parseFloat(getComputedStyle(yesBtn).fontSize) / 16;
+    const baseW = yesBtn.offsetWidth / scale, baseH = yesBtn.offsetHeight / scale;
+    const grow = Math.min(1 + attempts * 0.11, 1.7, (innerWidth - 32) / baseW);
+    yesBtn.style.setProperty("--grow", grow);
+
+    // vùng "Đồng ý" sẽ chiếm sau khi to ra (nằm giữa hàng nút) — tránh đè lên
+    const c = choices.getBoundingClientRect();
+    const ycx = c.left + c.width / 2, ycy = c.top + c.height / 2;
+    const yw = baseW * grow / 2 + 14, yh = baseH * grow / 2 + 14;
+    const yes = { l: ycx - yw, r: ycx + yw, t: ycy - yh, b: ycy + yh };
+
+    const w = noBtn.offsetWidth, h = noBtn.offsetHeight;
+    const curX = parseFloat(noBtn.style.left), curY = parseFloat(noBtn.style.top);
+    const pad = 16;
+    let x = curX, y = curY;
+    for (let i = 0; i < 40; i++) {
+      x = pad + Math.random() * Math.max(1, innerWidth - w - pad * 2);
+      y = pad + Math.random() * Math.max(1, innerHeight - h - pad * 2);
+      const overlapYes = x < yes.r && x + w > yes.l && y < yes.b && y + h > yes.t;
+      const tooClose = Math.hypot(x - curX, y - curY) < 110;
+      if (!overlapYes && !tooClose) break;
+    }
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+    noBtn.style.transform = `rotate(${(Math.random() - 0.5) * 14}deg)`;
+  }
+
+  noBtn.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") flee(e); });
+  noBtn.addEventListener("pointerdown", flee);
+  noBtn.addEventListener("click", (e) => { surrendered ? accept() : flee(e); });
+  yesBtn.addEventListener("click", () => {
+    // tránh trường hợp chạm vào "Không" xong nút "Đồng ý" phóng to nằm ngay dưới ngón tay
+    if (performance.now() - lastFlee < 350) return;
+    accept();
+  });
+
+  /* ---------- 5. đồng ý ---------- */
+  const pad2 = (n) => String(n).padStart(2, "0");
+  function accept() {
+    const key = "love-day:" + C.name;
+    let start = Number(store.get(key));
+    if (!start) { start = Date.now(); store.set(key, String(start)); }
+    const d = new Date(start);
+    $("#dateVal").innerHTML = `${pad2(d.getDate())}<i>·</i>${pad2(d.getMonth() + 1)}<i>·</i>${d.getFullYear()}`;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const first = new Date(d); first.setHours(0, 0, 0, 0);
+    const days = Math.round((today - first) / 86400000);
+    $("#dateDays").textContent = days > 0 ? `Đã bên nhau ${days} ngày 💗` : "";
+    go("s-yes");
+    celebrate();
+  }
+  $("#s-yes").addEventListener("pointerdown", (e) => {
+    if (e.target.closest(".btn")) return;
+    burst(e.clientX, e.clientY, 26, Math.PI * 2, 0, 0.7);
+  });
+  $("#replayBtn").addEventListener("click", () => {
+    opened = false;
+    envelope.classList.remove("open");
+    clearTimeout(typeTimer);
+    typedEl.textContent = "";
+    paper.classList.remove("typing-done");
+    go("s-intro");
+  });
+
+  /* ---------- canvas: tim bay & sao ---------- */
+  const HEART = new Path2D("M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z");
+  const sky = $("#sky"), sctx = sky.getContext("2d");
+  const conf = $("#confetti"), cctx = conf.getContext("2d");
+  const SKY_COLORS = ["#ff8fab", "#ff5c8a", "#ffc2d1", "#ffd6a5", "#f7a1c4"];
+  const CONF_COLORS = ["#ff5c8a", "#ff8fab", "#ffd6e0", "#f6c77a", "#ffffff", "#e23d6d", "#c9a7ff"];
+  let W = 0, H = 0, hearts = [], stars = [];
+
+  function drawHeart(ctx, x, y, s, rot) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    ctx.scale(s / 24, s / 24);
+    ctx.translate(-12, -12);
+    ctx.fill(HEART);
+    ctx.restore();
+  }
+  function newHeart(anywhere) {
+    return {
+      x: Math.random() * W, y: anywhere ? Math.random() * H : H + 30,
+      s: 9 + Math.random() * 17, vy: 0.25 + Math.random() * 0.55,
+      amp: 8 + Math.random() * 22, ph: Math.random() * 6.28, sp: 0.4 + Math.random() * 0.6,
+      a: 0.16 + Math.random() * 0.38, c: SKY_COLORS[(Math.random() * SKY_COLORS.length) | 0],
+      rot: (Math.random() - 0.5) * 0.6
+    };
+  }
+  function resize() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    for (const c of [sky, conf]) {
+      c.width = Math.round(W * dpr); c.height = Math.round(H * dpr);
+      c.style.width = W + "px"; c.style.height = H + "px";
+    }
+    sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const area = W * H;
+    hearts = Array.from({ length: Math.round(Math.min(34, area / 26000) * (reduced ? 0.4 : 1)) }, () => newHeart(true));
+    stars = Array.from({ length: Math.round(Math.min(130, area / 8000)) }, () => ({
+      x: Math.random() * W, y: Math.random() * H * 0.72, r: 0.3 + Math.random() * 1.2,
+      ph: Math.random() * 6.28, sp: 0.6 + Math.random() * 1.6
+    }));
+  }
+  let last = 0;
+  function skyLoop(now) {
+    const dt = Math.min(3, (now - last) / 16.67 || 1);
+    last = now;
+    const time = now / 1000;
+    sctx.clearRect(0, 0, W, H);
+    sctx.fillStyle = "#fff";
+    for (const s of stars) {
+      sctx.globalAlpha = reduced ? 0.45 : 0.2 + 0.6 * (0.5 + 0.5 * Math.sin(s.ph + time * s.sp));
+      sctx.beginPath();
+      sctx.arc(s.x, s.y, s.r, 0, 6.283);
+      sctx.fill();
+    }
+    for (const h of hearts) {
+      h.y -= h.vy * dt * (reduced ? 0.3 : 1);
+      if (h.y < -40) Object.assign(h, newHeart(false));
+      const fade = Math.min(1, (h.y + 40) / (H * 0.35));
+      sctx.globalAlpha = h.a * fade;
+      sctx.fillStyle = h.c;
+      drawHeart(sctx, h.x + Math.sin(h.ph + time * h.sp) * h.amp, h.y, h.s, h.rot + Math.sin(time * h.sp) * 0.15);
+    }
+    sctx.globalAlpha = 1;
+    requestAnimationFrame(skyLoop);
+  }
+
+  /* ---------- canvas: pháo giấy ---------- */
+  let parts = [], confRunning = false;
+  function spawn(p) {
+    parts.push(Object.assign({
+      rot: Math.random() * 6.28, vr: (Math.random() - 0.5) * 0.3,
+      s: 7 + Math.random() * 10, c: CONF_COLORS[(Math.random() * CONF_COLORS.length) | 0],
+      shape: Math.random() < 0.5 ? "heart" : Math.random() < 0.6 ? "rect" : "dot",
+      flip: Math.random() * 6.28
+    }, p));
+    if (!confRunning) { confRunning = true; requestAnimationFrame(confLoop); }
+  }
+  function burst(x, y, n, spread, angle, power) {
+    for (let i = 0; i < n; i++) {
+      const a = angle + (Math.random() - 0.5) * spread;
+      const v = (3 + Math.random() * 8) * power;
+      spawn({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v });
+    }
+  }
+  function rain(n) {
+    for (let i = 0; i < n; i++) {
+      spawn({ x: Math.random() * W, y: -20 - Math.random() * H * 0.5, vx: (Math.random() - 0.5) * 1.5, vy: 1 + Math.random() * 2 });
+    }
+  }
+  function confLoop() {
+    cctx.clearRect(0, 0, W, H);
+    for (const p of parts) {
+      p.vx *= 0.986; p.vy = p.vy * 0.986 + 0.16;
+      p.x += p.vx + Math.sin(p.flip) * 0.6; p.y += p.vy;
+      p.rot += p.vr; p.flip += 0.08;
+      cctx.fillStyle = p.c;
+      if (p.shape === "heart") {
+        drawHeart(cctx, p.x, p.y, p.s * 1.3, p.rot * 0.4);
+      } else if (p.shape === "rect") {
+        cctx.save();
+        cctx.translate(p.x, p.y);
+        cctx.rotate(p.rot);
+        cctx.scale(1, Math.cos(p.flip));
+        cctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
+        cctx.restore();
+      } else {
+        cctx.beginPath();
+        cctx.arc(p.x, p.y, p.s / 3, 0, 6.283);
+        cctx.fill();
+      }
+    }
+    parts = parts.filter((p) => p.y < H + 40);
+    if (parts.length) requestAnimationFrame(confLoop);
+    else { confRunning = false; cctx.clearRect(0, 0, W, H); }
+  }
+  function celebrate() {
+    const n = reduced ? 0.35 : 1;
+    burst(W / 2, H * 0.32, Math.round(130 * n), Math.PI * 2, 0, 1.1);
+    setTimeout(() => {
+      burst(0, H * 0.75, Math.round(70 * n), 0.9, -Math.PI / 3, 1.5);
+      burst(W, H * 0.75, Math.round(70 * n), 0.9, -Math.PI * 2 / 3, 1.5);
+    }, 350);
+    setTimeout(() => rain(Math.round(90 * n)), 900);
+    setTimeout(() => rain(Math.round(60 * n)), 2200);
+  }
+
+  addEventListener("resize", resize);
+  resize();
+  requestAnimationFrame(skyLoop);
+  resetAsk();
+})();
+</script>
+</body>
+</html>
