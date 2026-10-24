@@ -30,8 +30,8 @@
    ================================================================== */
 window.CONFIG = {
   name: "Hoài An",
-  me: "tớ",            // muốn xưng "anh – em" thì đổi thành "anh"
-  you: "cậu",          // ... và đổi thành "em"
+  me: "anh",           // cách xưng của người gửi (vd "tớ")
+  you: "em",           // cách gọi người nhận (vd "cậu")
   signature: "",       // tên người gửi, vd "Minh". Để trống sẽ ký "Người luôn nghĩ về {you}"
 
   // Màn 1 — phong thư
@@ -81,11 +81,11 @@ Nên hôm nay, {me} lấy hết can đảm để nói…`,
   yesMessage: "Cảm ơn {you} đã gật đầu. Từ hôm nay, {me} hứa sẽ thương {you} thật nhiều, kiên nhẫn lắng nghe và cùng {you} đi qua mọi ngày nắng mưa.",
   dateLabel: "Ngày đầu tiên của chúng mình",
   replyText: "Nhắn cho {me} ngay 💬",
-  replyLink: "",       // vd "https://m.me/ten-facebook" hoặc "https://zalo.me/0912345678". Để trống sẽ ẩn nút
+  replyLink: "https://zalo.me/0339655414",  // link Zalo/Messenger để nhắn lại. Để trống "" sẽ ẩn nút
   replayText: "Xem lại từ đầu",
 
-  // Nhạc nền: bỏ file mp3 vào thư mục này rồi ghi tên file, vd "music.mp3". Để trống = không có nhạc
-  music: ""
+  // Nhạc nền (file mp3 nằm cùng thư mục). Để trống "" = không có nhạc
+  music: "music.mp3"
 };
 </script>
 
@@ -533,13 +533,30 @@ Nên hôm nay, {me} lấy hết can đảm để nói…`,
   const bgm = $("#bgm"), musicBtn = $("#musicBtn");
   if (C.music) {
     bgm.src = C.music;
+    bgm.preload = "auto";
     musicBtn.hidden = false;
     bgm.addEventListener("error", () => { musicBtn.hidden = true; });
     bgm.addEventListener("play", () => { musicBtn.classList.add("playing"); musicBtn.setAttribute("aria-pressed", "true"); });
     bgm.addEventListener("pause", () => { musicBtn.classList.remove("playing"); musicBtn.setAttribute("aria-pressed", "false"); });
-    musicBtn.addEventListener("click", () => { bgm.paused ? bgm.play().catch(() => {}) : bgm.pause(); });
+    musicBtn.addEventListener("click", () => {
+      if (!bgm.paused) return bgm.pause();
+      bgm.play().then(() => { if (bgm.volume < 0.05) fadeIn(0.75, 1500); }).catch(() => {});
+    });
   }
-  const startMusic = () => { if (C.music && bgm.paused) bgm.play().catch(() => {}); };
+  // nhạc vào nhẹ nhàng: âm lượng tăng dần trong vài giây
+  function fadeIn(target, ms) {
+    const t0 = performance.now();
+    (function tick(now) {
+      const k = Math.min(1, (now - t0) / ms);
+      bgm.volume = target * k * k;
+      if (k < 1) requestAnimationFrame(tick);
+    })(t0);
+  }
+  const startMusic = () => {
+    if (!C.music || !bgm.paused) return;
+    bgm.volume = 0;
+    bgm.play().then(() => fadeIn(0.75, 3000)).catch(() => {});
+  };
 
   /* ---------- 1. phong thư ---------- */
   const envelope = $("#envelope");
@@ -625,7 +642,7 @@ Nên hôm nay, {me} lấy hết can đảm để nói…`,
   const yesBtn = $("#yesBtn"), noBtn = $("#noBtn");
   const noTexts = C.noTexts.map(t);
   const choices = $("#s-ask .choices");
-  let attempts = 0, surrendered = false, lastFlee = 0;
+  let attempts = 0, surrendered = false, lastFlee = 0, lastTap = 0, surrenderedAt = 0;
 
   // FLIP: nút trượt mượt tới chỗ mới thay vì nhảy cóc
   function flip(els, mutate) {
@@ -663,6 +680,7 @@ Nên hôm nay, {me} lấy hết can đảm để nói…`,
     // hết câu để nói thì "Không" cũng thành "Đồng ý"
     if (attempts >= noTexts.length) {
       surrendered = true;
+      surrenderedAt = now;
       flip([yesBtn, noBtn], () => {
         noBtn.classList.remove("fleeing");
         noBtn.classList.add("surrender");
@@ -712,9 +730,17 @@ Nên hôm nay, {me} lấy hết can đảm để nói…`,
     noBtn.style.transform = `rotate(${(Math.random() - 0.5) * 14}deg)`;
   }
 
-  noBtn.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") flee(e); });
-  noBtn.addEventListener("pointerdown", flee);
-  noBtn.addEventListener("click", (e) => { surrendered ? accept() : flee(e); });
+  noBtn.addEventListener("pointerenter", (e) => {
+    // chuột lướt tới thì né; bỏ qua lúc nút đang trượt ngang qua con trỏ đứng yên
+    if (e.pointerType === "mouse" && performance.now() - lastFlee > 480) flee(e);
+  });
+  noBtn.addEventListener("pointerdown", (e) => { lastTap = performance.now(); flee(e); });
+  noBtn.addEventListener("click", (e) => {
+    const now = performance.now();
+    // bỏ qua cú "click" trình duyệt tự sinh ra ngay sau một lần chạm (đã xử lý ở pointerdown)
+    if (surrendered) { if (now - surrenderedAt > 500) accept(); return; }
+    if (now - lastTap > 700) flee(e);   // còn lại: bấm bằng bàn phím
+  });
   yesBtn.addEventListener("click", () => {
     // tránh trường hợp chạm vào "Không" xong nút "Đồng ý" phóng to nằm ngay dưới ngón tay
     if (performance.now() - lastFlee < 350) return;
